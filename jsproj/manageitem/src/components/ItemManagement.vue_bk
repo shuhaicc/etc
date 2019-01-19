@@ -1,0 +1,161 @@
+<template>
+<div>
+  <div>
+    <h3>Input New Item</h3>
+   <form id="new_item_form" enctype="multipart/form-data" v-on:submit.prevent="onSubmit">
+    <!-- text -->
+    <p>
+      <label for="item_name_id">Name:</label>
+      <input type="text" id="item_name_id" v-model="item_name">
+    </p>
+    <p>
+      <label for="item_buyin_id">Buyin price:</label>
+      <input type="text" id="item_buyin_id" v-model="buyin">
+    </p>
+    <p>
+      <label for="item_sale_id">Sale price:</label>
+      <input type="text" id="item_sale_id" v-model="saleprice">
+    </p>
+    <p>
+      <label for="item_promotion_id">Promotion:</label>
+      <input type="text" id="item_promotion_id" v-model="promotion">
+    </p>
+    <p>
+      <label for="description_id">Description:</label>
+      <input type="textarea" id="description_id" v-model="description">
+    </p>
+    <!-- checkbox -->
+    <p>
+      <label for="item_status_id">Active status:</label>
+      <input type="checkbox" id="item_status_id" v-model="active_status">
+    </p>
+  
+    <input type="button" @click="submit_item" value="Save Profile">
+    </form>  
+  </div>
+  <div>
+    <h3>Upload Picture for {{ item_name }}</h3>
+    <file-upload :url='uploadUrl' :thumb-url='thumbUrl' :headers="headers" @change="onFileChange"></file-upload>
+  </div>
+</div>
+</template>
+
+<script>
+  import Vue from 'vue'
+  import axios from 'axios'
+  import VueAxios from 'vue-axios'
+  import config from './config.json'
+  import { FileUpload } from 'v-file-upload'
+  import 'v-file-upload/dist/v-file-upload.css'
+  Vue.use(FileUpload)
+  Vue.use(VueAxios, axios)
+
+  export default {
+    data () {
+      return {
+        item_name: 'xxxxx',
+        item_id: '1234',
+        buyin: '12.30',
+        saleprice: '20.00',
+        promotion: '15',
+        description: 'lalala',
+        active_status:'yes',
+        filesUploaded: [],
+        config: config,
+        uploadUrl: this.config.restApi + '/v1/upload_picture',
+        headers: {'access-token': 'Bearer: xxxxx'}
+      }
+    },
+    methods: {
+      mySaveMethod(file) {
+        let fileUpload = new FileUploadService(
+          this.uploadUrl,
+          this.headers,
+          this.onProgress
+        ),
+        fileUpload
+          .upload(file, { doc_id: 1 })
+          .then(e => {
+            // Handle success
+          })
+          .catch(e => {
+            // Handle error
+          })
+      },
+      onProgress(event) {
+        // Handdle the progress
+      },      
+      format (value, event) {
+        return value.toLowerCase()
+      },
+      clearFiles () {
+        this.$refs.fileinput.reset();
+      },
+      thumbUrl (file) {
+        return file.myThumbUrlProperty
+      },
+      onFileChange (file) {
+        // Handle files like:
+        this.fileUploaded = file
+      },
+      submit_item () {
+        // let urlParams = new URLSearchParams('page_size=100&order_type=PREORDER&item_type=all')
+        let restUrl = this.config.restApi + '/v1/additem'
+        if(this.promotion === "")
+          this.promotion = this.saleprice
+        var headers = {
+            'content-type': 'application/json'
+        }
+        axios.post(restUrl, {
+            item_name: this.item_name,
+            buyin: this.buyin,
+            saleprice: this.saleprice,
+            promotion: this.promotion,
+            active_status: this.ctive_status},
+            headers
+          )
+          .then(function (response) {
+            console.log("add item response ....");
+            console.log(response);
+            // this.item_id = "response.id";
+            // this.$store.state.current_item.item_name = this.item_name;
+            //   this.$router.push({path: 'upload_picture', query:{itemId:1234} });
+            })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    }
+  }
+</script>
+
+<style>
+  .dropbox {
+    outline: 2px dashed grey; /* the dash box */
+    outline-offset: -10px;
+    background: lightcyan;
+    color: dimgray;
+    padding: 10px 10px;
+    min-height: 200px; /* minimum height */
+    position: relative;
+    cursor: pointer;
+  }
+
+  .input-file {
+    opacity: 0; /* invisible but it's there! */
+    width: 100%;
+    height: 200px;
+    position: absolute;
+    cursor: pointer;
+  }
+
+  .dropbox:hover {
+    background: lightblue; /* when mouse over to the drop zone, change color */
+  }
+
+  .dropbox p {
+    font-size: 1.2em;
+    text-align: center;
+    padding: 50px 0;
+  }
+</style>

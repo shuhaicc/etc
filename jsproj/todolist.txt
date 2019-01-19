@@ -1,0 +1,77 @@
+Mongodb:  host:192.168.0.11
+
+db: csh-online-store
+collection: cshstoreitems
+
+* add webpage to rest service:
+  create a vue api --> build, merge dist files to public/static (both js and css)
+
+1. define schema for item info
+	var ItemInfoSchema = {
+		'id': '/ItemInfoSchema',
+		'type': 'object',
+		'properties': {
+			'itemName' : {type:'string', required: true},
+			'manufacturer' : {type:'string', required: true},
+			'item_photo': {
+				type: 'array',
+				items: { 'type': string },
+				required: true
+			},
+			'buy_price': {type: 'number'};
+			'sell_price': {type: 'number'};
+			'promotion_price': {type: 'number'};
+			'description' : {type:'string', required: true},
+			'is_active': {type:'bool', required: true}
+		}
+	};
+
+2. create web for upload item info
+
+3. fetch item info from test
+
+4. update lead.vue interface
+
+5. finish csh_item.vue...
+
+...
+
+
+<template>
+  <div>
+    <h3>Input New Item</h3>
+    <b-form-input v-model="item_name"
+                  type="text"
+                  placeholder="Item name">
+    </b-form-input>
+
+    <b-form-input v-model="buyin"
+                  type="text"
+                  placeholder="buy price">
+    </b-form-input>
+
+    <b-form-input v-model="saleprice"
+                  type="text"
+                  placeholder="Sale price">
+    </b-form-input>
+
+    <b-form-input v-model="promotion"
+                  type="text"
+                  placeholder="Promotion price">
+    </b-form-input>
+    <!-- <b-form-file v-model="file" ref="fileinput">
+    <b-button @click="clearFiles">Reset files</b-button>
+    </b-formfile> -->
+    <b-form-textarea id="description"
+                     v-model="description"
+                     placeholder="features ... "
+                     :rows="3"
+                     :max-rows="10">
+    </b-form-textarea>
+    <b-form-checkbox id="item_status"
+                    v-model="status"
+                    value="active"
+                    unchecked-value="not_active">
+    </b-form-checkbox>
+  </div>
+</template>
