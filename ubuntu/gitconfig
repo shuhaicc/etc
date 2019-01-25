@@ -1,0 +1,17 @@
+[user]
+	email = shuhai@solarwinds.cloud
+	name = shuahicc
+[core]
+	editor = vim
+[diff]
+        tool = vimdiff
+[difftool]
+        prompt = false
+[alias]
+        d = difftool
+[merge]
+        tool = vimdiff
+        conflictstyle = diff3
+
+# to diff with a previous commit xxxx : git difftool xxxx
+
