@@ -1,0 +1,16 @@
+[core]
+	editor = vim
+	trustctime = false
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
+[alias]
+	d = difftool
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+[user]
+	name = shuhaicc
+	email = shuhai@solarwinds.cloud
+
